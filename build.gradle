@@ -308,7 +308,7 @@ testing {
             targets.configureEach {
                 testTask.configure {
                     shouldRunAfter(test)
-                    systemProperties project.properties.subMap(["platform"])
+                    systemProperties project.properties.subMap(["platform", "flutterApp"])
                 }
             }
         }

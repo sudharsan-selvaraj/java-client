@@ -50,7 +50,7 @@ public class BaseFlutterTest {
             // TODO: update it with FlutterDriverOptions once implemented
             UiAutomator2Options options = new UiAutomator2Options()
                     .setAutomationName(AutomationName.FLUTTER_INTEGRATION)
-                    .setApp(System.getProperty("flutterApp"))
+                    .setApp(System.getenv("FLUTTER_APP"))
                     .eventTimings();
             driver = new FlutterAndroidDriver(service.getUrl(), options);
         } else {

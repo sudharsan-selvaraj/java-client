@@ -83,7 +83,7 @@ jobs:
       run: |
         npm install --location=global appium
         appium driver install appium-flutter-integration-driver --source npm
-        flutter_android_app="https://github.com/AppiumTestDistribution/appium-flutter-server/releases/latest/download/app-debug.apk"
+        flutter_android_app=https://github.com/AppiumTestDistribution/appium-flutter-server/releases/latest/download/app-debug.apk
 
     - name: Install UIA2 driver
       if: matrix.e2e-tests == 'android'
@@ -93,7 +93,8 @@ jobs:
       uses: reactivecircus/android-emulator-runner@v2
       with:
         script: pwd  &&
-          ./gradlew e2eFlutterTest -Pplatform="android" -PflutterApp=$flutter_android_app -Pselenium.version=$latest_snapshot -PisCI
+          export FLUTTER_APP=$flutter_android_app &&
+          ./gradlew e2eFlutterTest -Pplatform="android" -Pselenium.version=$latest_snapshot -PisCI
         api-level: ${{ env.ANDROID_SDK_VERSION }}
         avd-name: ${{ env.ANDROID_EMU_NAME }}
         disable-spellchecker: true

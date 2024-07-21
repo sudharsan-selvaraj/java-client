@@ -29,6 +29,15 @@ public class ScrollParameter extends FlutterCommandParameter {
     /**
      * Constructs a new ScrollOptions object with the given parameters.
      *
+     * @param scrollTo the locator used for scrolling to a specific element
+     */
+    public ScrollParameter(AppiumBy.FlutterBy scrollTo) {
+        this(scrollTo, ScrollDirection.UP);
+    }
+
+    /**
+     * Constructs a new ScrollOptions object with the given parameters.
+     *
      * @param scrollTo        the locator used for scrolling to a specific element
      * @param scrollDirection the direction in which to scroll (e.g., ScrollDirection.DOWN)
      * @throws IllegalArgumentException if scrollTo is null

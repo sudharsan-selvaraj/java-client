@@ -16,12 +16,12 @@ import java.util.Optional;
 
 public class BaseFlutterTest {
 
-    protected static final boolean isAndroid = Optional
+    protected static final boolean IS_ANDROID = Optional
             .ofNullable(System.getProperty("platform"))
             .orElse("android")
             .equalsIgnoreCase("android");
-    public static final String APP_ID = isAndroid ?
-            "com.example.appium_testing_app" : "com.example.appiumTestingApp";
+    public static final String APP_ID = IS_ANDROID
+            ? "com.example.appium_testing_app" : "com.example.appiumTestingApp";
     protected static final int PORT = 4723;
 
     private static AppiumDriverLocalService service;
@@ -41,7 +41,7 @@ public class BaseFlutterTest {
 
     @BeforeEach
     public void startSession() throws MalformedURLException {
-        if (isAndroid) {
+        if (IS_ANDROID) {
             // TODO: update it with FlutterDriverOptions once implemented
             UiAutomator2Options options = new UiAutomator2Options()
                     .setAutomationName(AutomationName.FLUTTER_INTEGRATION)
@@ -49,7 +49,8 @@ public class BaseFlutterTest {
                     .eventTimings();
             driver = new FlutterAndroidDriver(service.getUrl(), options);
         } else {
-            throw new InvalidArgumentException("Currently flutter driver implementation only supports android platform");
+            throw new InvalidArgumentException(
+                    "Currently flutter driver implementation only supports android platform");
         }
     }
 

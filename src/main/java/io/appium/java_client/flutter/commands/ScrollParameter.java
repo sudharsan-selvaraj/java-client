@@ -8,6 +8,8 @@ import lombok.experimental.Accessors;
 import org.openqa.selenium.WebElement;
 
 import java.time.Duration;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -32,7 +34,7 @@ public class ScrollParameter extends FlutterCommandParameter {
      * @param scrollTo the locator used for scrolling to a specific element
      */
     public ScrollParameter(AppiumBy.FlutterBy scrollTo) {
-        this(scrollTo, ScrollDirection.UP);
+        this(scrollTo, ScrollDirection.DOWN);
     }
 
     /**
@@ -50,17 +52,20 @@ public class ScrollParameter extends FlutterCommandParameter {
 
     @Override
     public Map<String, Object> toJson() {
-        return Map.of(
-                "finder", parseFlutterLocator(scrollTo),
-                "scrollView", scrollView,
-                "delta", delta,
-                "maxScrolls", maxScrolls,
-                "settleBetweenScrollsTimeout", settleBetweenScrollsTimeout,
-                "scrollDirection", Optional.ofNullable(scrollDirection)
-                        .orElse(ScrollDirection.UP).getDirection(),
-                "dragDuration", Optional.ofNullable(dragDuration)
-                        .orElse(Duration.ZERO).getSeconds()
-        );
+        Map<String, Object> params = new HashMap<>();
+
+        params.put("finder", parseFlutterLocator(scrollTo));
+        params.put("scrollView", scrollView);
+        params.put("delta", delta);
+        params.put("maxScrolls", maxScrolls);
+        params.put("settleBetweenScrollsTimeout", settleBetweenScrollsTimeout);
+        Optional.ofNullable(scrollDirection)
+                .ifPresent(direction -> params.put("scrollDirection", direction.getDirection()));
+        Optional.ofNullable(dragDuration)
+                .ifPresent(direction -> params.put("dragDuration", dragDuration.getSeconds()));
+
+        params.entrySet().removeIf(entry -> entry.getValue() == null);
+        return Collections.unmodifiableMap(params);
     }
 
     @Getter

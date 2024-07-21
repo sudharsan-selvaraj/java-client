@@ -1,7 +1,9 @@
 package io.appium.java_client.android;
 
+import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.flutter.android.FlutterAndroidDriver;
+import io.appium.java_client.flutter.commands.ScrollParameter;
 import io.appium.java_client.remote.AutomationName;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
@@ -9,7 +11,9 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidArgumentException;
+import org.openqa.selenium.WebElement;
 
 import java.net.MalformedURLException;
 import java.util.Optional;
@@ -25,7 +29,8 @@ public class BaseFlutterTest {
     protected static final int PORT = 4723;
 
     private static AppiumDriverLocalService service;
-    protected static AndroidDriver driver;
+    protected static FlutterAndroidDriver driver;
+    protected By loginButton = AppiumBy.flutterText("Login");
 
     /**
      * initialization.
@@ -66,5 +71,12 @@ public class BaseFlutterTest {
         if (service.isRunning()) {
             service.stop();
         }
+    }
+
+    public void openScreen(String screenTitle) {
+        ScrollParameter scrollOptions = new ScrollParameter(
+                AppiumBy.flutterText(screenTitle), ScrollParameter.ScrollDirection.DOWN);
+        WebElement element = driver.scrollTillVisible(scrollOptions);
+        element.click();
     }
 }

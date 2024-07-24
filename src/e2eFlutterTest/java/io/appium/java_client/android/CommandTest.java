@@ -8,11 +8,17 @@ import io.appium.java_client.flutter.commands.LongPressParameter;
 import io.appium.java_client.flutter.commands.ScrollParameter;
 import io.appium.java_client.flutter.commands.WaitParameter;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.Point;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebElement;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.logging.FileHandler;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -122,24 +128,30 @@ class CommandTest extends BaseFlutterTest {
 
     @Test
     void testCameraMocking() throws IOException {
-        System.out.printf("Directory Path: " + System.getProperty("user.dir"));
-        driver.findElement(BaseFlutterTest.LOGIN_BUTTON).click();
-        openScreen("Image Picker");
+        try {
+            System.out.printf("Directory Path: " + System.getProperty("user.dir"));
+            driver.findElement(BaseFlutterTest.LOGIN_BUTTON).click();
+            openScreen("Image Picker");
 
-        final String successQr = driver.injectMockImage(
-                new File(String.valueOf(TestUtils.resourcePathToAbsolutePath("success_qr.png"))));
-        driver.injectMockImage(new File(String.valueOf(TestUtils.resourcePathToAbsolutePath("second_qr.png"))));
+            final String successQr = driver.injectMockImage(
+                    new File(String.valueOf(TestUtils.resourcePathToAbsolutePath("success_qr.png"))));
+            driver.injectMockImage(new File(String.valueOf(TestUtils.resourcePathToAbsolutePath("second_qr.png"))));
 
-        driver.findElement(AppiumBy.flutterKey("capture_image")).click();
-        driver.findElement(AppiumBy.flutterText("PICK")).click();
-        assertEquals(driver.findElement(AppiumBy.flutterText("SecondInjectedImage")).getText(), "SecondInjectedImage");
-        assertTrue(driver.findElement(AppiumBy.flutterText("SecondInjectedImage")).isDisplayed());
+            driver.findElement(AppiumBy.flutterKey("capture_image")).click();
+            driver.findElement(AppiumBy.flutterText("PICK")).click();
+            assertEquals(driver.findElement(AppiumBy.flutterText("SecondInjectedImage")).getText(), "SecondInjectedImage");
+            assertTrue(driver.findElement(AppiumBy.flutterText("SecondInjectedImage")).isDisplayed());
 
-        driver.activateInjectedImage(successQr);
+            driver.activateInjectedImage(successQr);
 
-        driver.findElement(AppiumBy.flutterKey("capture_image")).click();
-        driver.findElement(AppiumBy.flutterText("PICK")).click();
-        assertEquals(driver.findElement(AppiumBy.flutterText("Success!")).getText(), "Success!");
-        assertTrue(driver.findElement(AppiumBy.flutterText("Success!")).isDisplayed());
+            driver.findElement(AppiumBy.flutterKey("capture_image")).click();
+            driver.findElement(AppiumBy.flutterText("PICK")).click();
+            assertEquals(driver.findElement(AppiumBy.flutterText("Success!")).getText(), "Success!");
+            assertTrue(driver.findElement(AppiumBy.flutterText("Success!")).isDisplayed());
+        } catch (Exception e) {
+            File image = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+            Files.copy(image.toPath(), new FileOutputStream(System.getProperty("user.dir") + "/logs/screenshot.png"));
+            throw e;
+        }
     }
 }

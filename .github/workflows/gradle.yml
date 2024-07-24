@@ -97,6 +97,7 @@ jobs:
         disable-animations: true
         target: ${{ env.ANDROID_EMU_TARGET }}
 
+
     - name: Run Flutter Android E2E tests
       if: matrix.e2e-tests == 'flutter-android'
       uses: reactivecircus/android-emulator-runner@v2
@@ -111,8 +112,14 @@ jobs:
         disable-animations: true
         arch: x86_64
         profile: Nexus 6
-        target: google_apis
+        target: google_api
 
+    - name: upload appium logs
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: appium-logs
+        path: ${{ github.workspace }}/logs
 
     - name: Select Xcode
       if: matrix.e2e-tests == 'ios' || matrix.e2e-tests == 'flutter-ios'

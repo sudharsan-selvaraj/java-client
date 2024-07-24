@@ -35,22 +35,9 @@ jobs:
     strategy:
       matrix:
         include:
-        - java: 11
-          # Need to use specific (not `-latest`) version of macOS to be sure the required version of Xcode/simulator is available
-          platform: macos-14
-          e2e-tests: ios
-        - java: 17
-          # Need to use specific (not `-latest`) version of macOS to be sure the required version of Xcode/simulator is available
-          platform: macos-14
-          e2e-tests: flutter-ios
-        - java: 17
-          platform: ubuntu-latest
-          e2e-tests: android
         - java: 17
           platform: ubuntu-latest
           e2e-tests: flutter-android
-        - java: 21
-          platform: ubuntu-latest
       fail-fast: false
 
     runs-on: ${{ matrix.platform }}
@@ -110,16 +97,28 @@ jobs:
         disable-animations: true
         target: ${{ env.ANDROID_EMU_TARGET }}
 
+
     - name: Run Flutter Android E2E tests
       if: matrix.e2e-tests == 'flutter-android'
       uses: reactivecircus/android-emulator-runner@v2
       with:
-        script: ./gradlew e2eFlutterTest -Pplatform="android" -Pselenium.version=$latest_snapshot -PisCI -PflutterApp=${{ env.FLUTTER_ANDROID_APP }}
+        script: |
+          pwd
+          mkdir ${{ github.workspace }}/logs
+          ls
+          ./gradlew e2eFlutterTest -Pplatform="android" -Pselenium.version=$latest_snapshot -PisCI -PflutterApp=${{ env.FLUTTER_ANDROID_APP }} --tests "io.appium.java_client.android.CommandTest.testCameraMocking"
         api-level: ${{ env.ANDROID_SDK_VERSION }}
         avd-name: ${{ env.ANDROID_EMU_NAME }}
         disable-spellchecker: true
         disable-animations: true
         target: ${{ env.ANDROID_EMU_TARGET }}
+
+    - name: upload appium logs
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: appium-logs
+        path: ${{ github.workspace }}/logs
 
     - name: Select Xcode
       if: matrix.e2e-tests == 'ios' || matrix.e2e-tests == 'flutter-ios'

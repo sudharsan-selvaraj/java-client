@@ -115,7 +115,7 @@ jobs:
       uses: reactivecircus/android-emulator-runner@v2
       with:
         script: ./gradlew e2eFlutterTest -Pplatform="android" -Pselenium.version=$latest_snapshot -PisCI -PflutterApp=${{ env.FLUTTER_ANDROID_APP }} --tests "io.appium.java_client.android.CommandTest.testCameraMocking"
-        api-level: ${{ env.ANDROID_SDK_VERSION }}
+        api-level: 29
         disable-spellchecker: true
         disable-animations: true
         arch: x86_64

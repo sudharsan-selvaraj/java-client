@@ -115,10 +115,11 @@ jobs:
       uses: reactivecircus/android-emulator-runner@v2
       with:
         script: ./gradlew e2eFlutterTest -Pplatform="android" -Pselenium.version=$latest_snapshot -PisCI -PflutterApp=${{ env.FLUTTER_ANDROID_APP }}
-        api-level: 31
-        avd-name: ${{ env.ANDROID_EMU_NAME }}
+        api-level: ${{ env.ANDROID_SDK_VERSION }}
         disable-spellchecker: true
         disable-animations: true
+        arch: x86_64
+        profile: Nexus 6
         target: google_apis
 
 

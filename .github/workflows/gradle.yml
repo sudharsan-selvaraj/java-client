@@ -107,12 +107,11 @@ jobs:
           mkdir ${{ github.workspace }}/logs
           ls
           ./gradlew e2eFlutterTest -Pplatform="android" -Pselenium.version=$latest_snapshot -PisCI -PflutterApp=${{ env.FLUTTER_ANDROID_APP }} --tests "io.appium.java_client.android.CommandTest.testCameraMocking"
-        api-level: "30"
+        api-level: ${{ env.ANDROID_SDK_VERSION }}
+        avd-name: ${{ env.ANDROID_EMU_NAME }}
         disable-spellchecker: true
         disable-animations: true
-        arch: x86_64
-        profile: Nexus 6
-        target: google_apis
+        target: ${{ env.ANDROID_EMU_TARGET }}
 
     - name: upload appium logs
       if: always()

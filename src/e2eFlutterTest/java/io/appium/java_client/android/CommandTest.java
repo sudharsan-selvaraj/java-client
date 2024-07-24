@@ -137,7 +137,8 @@ class CommandTest extends BaseFlutterTest {
 
             driver.findElement(AppiumBy.flutterKey("capture_image")).click();
             driver.findElement(AppiumBy.flutterText("PICK")).click();
-            assertEquals(driver.findElement(AppiumBy.flutterText("SecondInjectedImage")).getText(), "SecondInjectedImage");
+            assertEquals(driver.findElement(AppiumBy.flutterText("SecondInjectedImage")).getText(),
+                    "SecondInjectedImage");
             assertTrue(driver.findElement(AppiumBy.flutterText("SecondInjectedImage")).isDisplayed());
 
             driver.activateInjectedImage(successQr);
@@ -148,8 +149,8 @@ class CommandTest extends BaseFlutterTest {
             assertTrue(driver.findElement(AppiumBy.flutterText("Success!")).isDisplayed());
         } catch (Exception e) {
             File image = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-            Files.copy(image.toPath(), new FileOutputStream(System.getProperty("user.dir") + "/logs/screenshot.png"));
-            throw e;
+            Files.copy(image.toPath(),
+                    new FileOutputStream(System.getProperty("user.dir") + "/logs/screenshot.png"));
         }
     }
 }

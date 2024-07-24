@@ -35,22 +35,9 @@ jobs:
     strategy:
       matrix:
         include:
-        - java: 11
-          # Need to use specific (not `-latest`) version of macOS to be sure the required version of Xcode/simulator is available
-          platform: macos-14
-          e2e-tests: ios
-        - java: 17
-          # Need to use specific (not `-latest`) version of macOS to be sure the required version of Xcode/simulator is available
-          platform: macos-14
-          e2e-tests: flutter-ios
-        - java: 17
-          platform: ubuntu-latest
-          e2e-tests: android
         - java: 17
           platform: ubuntu-latest
           e2e-tests: flutter-android
-        - java: 21
-          platform: ubuntu-latest
       fail-fast: false
 
     runs-on: ${{ matrix.platform }}

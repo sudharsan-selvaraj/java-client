@@ -122,6 +122,7 @@ class CommandTest extends BaseFlutterTest {
 
     @Test
     void testCameraMocking() throws IOException {
+        System.out.printf("Directory Path: " + System.getProperty("user.dir"));
         driver.findElement(BaseFlutterTest.LOGIN_BUTTON).click();
         openScreen("Image Picker");
 
